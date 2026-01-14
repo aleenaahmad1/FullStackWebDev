@@ -32,5 +32,5 @@
     server-->>browser: [{ "content": "HTML is easy", "date": "2023-1-1" }, ... ] (data.json)
     deactivate server    
 
-    Note right of browser: The browser executes the callback function that renders the notes 
+    Note right of browser: The notes rendered by the browser using the callback function in the JS file
 ```
