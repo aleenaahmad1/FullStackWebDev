@@ -10,11 +10,13 @@
     deactivate server
     
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
-    Note right of browser: note page reloaded by browser
     activate server
     server-->>browser: HTML doc
     deactivate server
     
+    Note right of browser: note page reloaded by browser
+    
+
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
     activate server
     server-->>browser: main.css file
