@@ -17,7 +17,13 @@ const Feedback = ({onGoodClick, onBadClick, onNeutralClick, handleTotal}) => {
 }
 
 const Stats = ({good, neutral, bad, total}) => {
-  
+  if (total == 0) {
+   return (
+    <>
+    <p>No feedback given.</p>
+    </>
+   ) 
+  }
   return (
     <>
     <h1>Statistics</h1>
@@ -35,7 +41,7 @@ const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
+  const [bad, setBad] = useState(0) 
   const [total, setTotal] = useState(0)
   
   return (
