@@ -14,6 +14,13 @@ const App = () => {
  
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(Array(8).fill(0))
+  const [highestVoted, setHighestVoted] = useState('')
+
+  const findHighestVotes = (arr) => {
+    const highestVote = Math.max(...arr)
+    const idx = arr.indexOf(highestVote)
+    setHighestVoted(anecdotes[idx])
+  }
 
   const handleClick = () => {
     const random_num = Math.floor(Math.random() * 8)
@@ -24,16 +31,21 @@ const App = () => {
     const copy = [...votes]
     console.log("copy: ", copy)
     copy[selected] += 1
+    findHighestVotes(copy)
     console.log("selected: ", selected)
     setVotes(copy)
   }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p>
       <button onClick={handleClick}>Next Anecdote</button>
       <button onClick={handleVote}>Vote</button>
+
+      <h1>Anecdote with most votes</h1>
+      <p>{highestVoted}</p>
     </div>
   )
 }
