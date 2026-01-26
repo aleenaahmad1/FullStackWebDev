@@ -30,6 +30,19 @@ const Course = (props) => {
   )
 }
 
+const Total = ({course}) => {
+  console.log("prop in Total: ", course)
+  console.log("parts: ", course.parts)
+  const initialValue = 0
+  const exercises = course.parts.map(p => p.exercises)
+  console.log("exercises: ", exercises)
+  return (
+    <>
+    <p>Total of {exercises.reduce((accumulator, currentValue) => accumulator + currentValue, initialValue)} exercises</p>
+    </>
+  )
+}
+
 
 const App = () => {
   const course = {
@@ -50,11 +63,22 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'Redux',
+        exercises: 11,
+        id: 4
       }
     ]
   }
 
-  return <Course course={course} />
+  return (
+  <>
+  <Course course={course} />
+  <Total course={course} />
+  </>
+  )
+
 }
 
 export default App
