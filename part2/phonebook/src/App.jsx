@@ -3,6 +3,7 @@ import axios from 'axios'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -13,11 +14,10 @@ const App = () => {
  
   useEffect(() => {
     console.log("effect")
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log("promise complete")
-        setPersons(response.data)
+    personService
+      .getAllPersons()
+      .then(person => {
+        setPersons(person)
       })
   }, [])
 
@@ -49,7 +49,7 @@ const App = () => {
   const checkNumberExists = (number) => {
     return persons.find((person) => person.number === number)
   }
-    
+  
   const handleSubmit = (event) => {
     event.preventDefault()
     if(!(checkNameExists(newName) === undefined)){
@@ -68,10 +68,23 @@ const App = () => {
       name: newName,
       number: newNumber
     }
-    setPersons(persons.concat(person_object))
-    console.log("Persons:", persons)
-    setNewName('')
-    setNewNumber('')
+    personService
+      .savePerson(person_object)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
+  }
+
+  const handleDelete = (id, name) => {
+    console.log("delete clicked.")
+    confirm(`Delete ${name}?`)
+    console.log(id)
+    personService.deletePerson(id)
+    .then( () => {
+      setPersons(persons.filter((person) => person.id !== id))
+    })
   }
 
   return (
@@ -81,7 +94,7 @@ const App = () => {
       <></>
       <PersonForm name={newName} handleName={handleNewName} number={newNumber} handleNumber={handleNewNumber} handleFormSubmit={handleSubmit}></PersonForm>
       <h2>Numbers</h2>
-      <Persons personsList={personsToShow}/>
+      <Persons personsList={personsToShow} handleDelete={handleDelete}/>
     </div>
   )
 }
