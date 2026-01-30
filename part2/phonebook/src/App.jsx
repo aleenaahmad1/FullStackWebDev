@@ -5,18 +5,28 @@ const App = () => {
     { name: 'Arto Hellas' }
   ]) 
   const [newName, setNewName] = useState('')
-
+ 
   const handleNewName = (event) => {
-    console.log(event.target.value)
+    // console.log(event.target.value)
     setNewName(event.target.value)
   }
   
+  const checkNameExists = (name) => {
+    return persons.find((person) => person.name === name)
+  }
+    
   const handleSubmit = (event) => {
     event.preventDefault()
+    if(!(checkNameExists(newName) === undefined)){
+      alert("This name already exists.")
+      setNewName('')
+      return
+    }
     const person_object = {
       name: newName
     }
     setPersons(persons.concat(person_object))
+    console.log("Persons:", persons)
     setNewName('')
   }
 
