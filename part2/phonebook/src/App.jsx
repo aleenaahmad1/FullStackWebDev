@@ -52,12 +52,6 @@ const App = () => {
   
   const handleSubmit = (event) => {
     event.preventDefault()
-    if(!(checkNameExists(newName) === undefined)){
-      alert(`${newName} is already added to the phonebook.`)
-      setNewName('')
-      setNewNumber('')
-      return
-    }
     if(!(checkNumberExists(newNumber) === undefined)){
       alert(`${newNumber} is already added to the phonebook.`)
       setNewName('')
@@ -67,6 +61,20 @@ const App = () => {
     const person_object = {
       name: newName,
       number: newNumber
+    }
+    if(!(checkNameExists(newName) === undefined)){
+      alert(`${newName} is already added to the phonebook, replace the old number with the new one?`)
+      const person_to_update = persons.find((person) => person.name === newName)
+      console.log("PERSON TO UPDATE:", person_to_update)
+      personService
+        .updateNumber(person_to_update.id, person_object)
+        .then(returnedPerson => {
+          setPersons(persons.map(
+            p => p.id !== returnedPerson.id ? p : returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
+      return
     }
     personService
       .savePerson(person_object)
