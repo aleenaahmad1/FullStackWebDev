@@ -14,6 +14,7 @@ const App = () => {
   const [searchName, setSearchName] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [notif, setNotif] = useState(null)
+  const [msgClass, setMsgClass] = useState('')
  
   useEffect(() => {
     console.log("effect")
@@ -77,6 +78,15 @@ const App = () => {
         setNewName('')
         setNewNumber('')
         setNotif(`${returnedPerson.name}'s number has been updated.`)
+        setMsgClass('notif')
+        setTimeout(() => {
+          setNotif(null)
+        }, 5000)
+      })
+      .catch(error => {
+        setNotif(`${person_to_update.name} has already been removed from the server.`)
+        setMsgClass('error')
+        setPersons(persons.filter(p => p.id !== person_to_update.id))
         setTimeout(() => {
           setNotif(null)
         }, 5000)
@@ -90,6 +100,7 @@ const App = () => {
         setNewName('')
         setNewNumber('')
         setNotif(`${returnedPerson.name} added to phonebook.`)
+        setMsgClass('notif')
         setTimeout(() => {
           setNotif(null)
         }, 5000)
@@ -112,7 +123,7 @@ const App = () => {
       <Filter searchedName={searchName} handleNameSearch = {handleSearch}/>
       <></>
       <PersonForm name={newName} handleName={handleNewName} number={newNumber} handleNumber={handleNewNumber} handleFormSubmit={handleSubmit}></PersonForm>
-      <Notification msg={notif}></Notification>
+      <Notification msg={notif} divClass={msgClass}></Notification>
       <h2>Numbers</h2>
       <Persons personsList={personsToShow} handleDelete={handleDelete}/>
     </div>

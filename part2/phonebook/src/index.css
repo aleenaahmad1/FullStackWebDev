@@ -8,3 +8,14 @@
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+.error {
+  padding: 5px; 
+  background-color: rgb(242, 144, 141);
+  width: 50%;
+  border-color: rgb(79, 19, 4);
+  border-style: solid;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

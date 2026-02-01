@@ -1,24 +1,9 @@
 {
   "persons": [
     {
-      "name": "aleena",
-      "number": "1",
-      "id": "2fb8"
-    },
-    {
-      "id": "eeb4",
-      "name": "xzy",
-      "number": "983821"
-    },
-    {
       "name": "xyz",
       "number": "444",
       "id": "f6b6"
-    },
-    {
-      "id": "bb8b",
-      "name": "poshi",
-      "number": "12345"
     }
   ]
 }
