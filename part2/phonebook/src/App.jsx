@@ -3,7 +3,9 @@ import axios from 'axios'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 import personService from './services/persons'
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -11,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [notif, setNotif] = useState(null)
  
   useEffect(() => {
     console.log("effect")
@@ -73,6 +76,10 @@ const App = () => {
             p => p.id !== returnedPerson.id ? p : returnedPerson))
         setNewName('')
         setNewNumber('')
+        setNotif(`${returnedPerson.name}'s number has been updated.`)
+        setTimeout(() => {
+          setNotif(null)
+        }, 5000)
       })
       return
     }
@@ -82,6 +89,10 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
+        setNotif(`${returnedPerson.name} added to phonebook.`)
+        setTimeout(() => {
+          setNotif(null)
+        }, 5000)
       })
   }
 
@@ -101,6 +112,7 @@ const App = () => {
       <Filter searchedName={searchName} handleNameSearch = {handleSearch}/>
       <></>
       <PersonForm name={newName} handleName={handleNewName} number={newNumber} handleNumber={handleNewNumber} handleFormSubmit={handleSubmit}></PersonForm>
+      <Notification msg={notif}></Notification>
       <h2>Numbers</h2>
       <Persons personsList={personsToShow} handleDelete={handleDelete}/>
     </div>
