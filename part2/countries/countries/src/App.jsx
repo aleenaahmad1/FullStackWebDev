@@ -2,6 +2,7 @@ import { useState } from 'react'
 import countryService from './services/countries'
 import Notification from './components/Notification'
 import Country from './components/Country'
+import CountryList from './components/CountryList'
 
 
 const App = () => {
@@ -53,12 +54,16 @@ const App = () => {
 
   }
 
+  const showCountry = (country) => {
+    setDisplayedCountries([country])
+    setSingleCountry(true)
+  }
+
   return (
     <>
     Find countries  <input onChange={handleSearch} value={searchedCountry}/>
     <Notification msg={notif} />
-    {displayedCountries.map(c => <li key={c.name.common}>{c.name.common}</li>)}
-    {singleCountry ? <Country country_data={displayedCountries[0]} /> : null}
+    {singleCountry ? <Country country_data={displayedCountries[0]} /> : <CountryList countries={displayedCountries} showCountry={showCountry} />}
     </>
   )
 
