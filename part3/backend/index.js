@@ -18,14 +18,17 @@ morgan.token('body', function (request, response) {return JSON.stringify(request
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
+
 // const checkNameExists = (name) => {
-//     const person = persons.find(p => p.name === name)
-//     if(person){
-//         return true
+//   return Person.findOne({ name: name }).then(person => {
+//     if (person) {
+//       return true
 //     } else {
-//         return false
+//       return false
 //     }
+//   })
 // }
+
 
 app.get('/', (request, response) => {
     response.send('<h1>Hello World</h1>')
@@ -37,11 +40,15 @@ app.get('/api/persons', (request, response) => {
     })
 })
 
-// app.get('/api/info', (request, response) => {
-//   const num_people = persons.length
-//   const date = new Date()
-//   response.send(`<p>The phonebook has info of ${num_people} people.</p> <p>${date}</p> `)
-// })
+app.get('/api/info', (request, response, next) => {
+  Person.countDocuments({})
+  .then( count => {
+    const date = new Date()
+    response.send(`<p>The phonebook has info of ${count} people.</p> <p>${date}</p> `)
+  })
+  .catch(error => next(error))
+
+})
 
 app.get('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
@@ -87,6 +94,26 @@ app.post('/api/persons', (request, response) => {
   person.save().then(savedPerson => {
     response.json(savedPerson)
   })
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const  {name, number} = request.body
+
+  Person.findById(request.params.id)
+  .then(person => {
+    
+    if (!person) {
+      return response.status(404).end()
+    }
+
+    person.name = name
+    person.number = number
+
+    return person.save().then((updatedPerson) => {
+      response.json(updatedPerson)
+    })
+  })
+  .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
