@@ -1,1 +1,0 @@
-DELETE https://phonebook-ejb9.onrender.com/api/persons/1
