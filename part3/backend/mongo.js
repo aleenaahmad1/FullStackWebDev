@@ -20,7 +20,7 @@ const personSchema = new mongoose.Schema({
     number: String,
     })
 
-    const Person = mongoose.model('Person', personSchema)
+const Person = mongoose.model('Person', personSchema)
 
 if (!(personName && personNumber)) {
     // If name or number is not provided, list all entries in the phonebook
