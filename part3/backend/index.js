@@ -7,6 +7,7 @@ const cors = require('cors')
 app.use(cors())
 
 const Person = require('./models/person')
+
 var morgan = require('morgan')
 morgan.token('body', function (request) {return JSON.stringify(request.body)})
 

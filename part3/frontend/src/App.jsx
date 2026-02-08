@@ -61,6 +61,8 @@ const App = () => {
       setNewNumber('')
       return
     }
+    console.log("name: ", newName)
+    console.log("name length: ", newName.length)
     const person_object = {
       name: newName,
       number: newNumber
@@ -82,7 +84,7 @@ const App = () => {
           setNotif(null)
         }, 5000)
       })
-      .catch(error => {
+      .catch( () => {
         setNotif(`${person_to_update.name} has already been removed from the server.`)
         setMsgClass('error')
         setPersons(persons.filter(p => p.id !== person_to_update.id))
@@ -100,6 +102,12 @@ const App = () => {
         setNewNumber('')
         setNotif(`${returnedPerson.name} added to phonebook.`)
         setMsgClass('notif')
+        setTimeout(() => {
+          setNotif(null)
+        }, 5000)
+      }).catch(error => {
+        setNotif(error.response.data.error)
+        setMsgClass('error')
         setTimeout(() => {
           setNotif(null)
         }, 5000)
