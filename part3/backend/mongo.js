@@ -16,29 +16,31 @@ mongoose.set('strictQuery',false)
 mongoose.connect(url, { family: 4 })
 
 const personSchema = new mongoose.Schema({
-    name: String, 
-    number: String,
-    })
+  name: {
+    type: String,
+    minLength: 3,
+    required: true
+  },
+  number: String
+})
 
 const Person = mongoose.model('Person', personSchema)
 
 if (!(personName && personNumber)) {
-    // If name or number is not provided, list all entries in the phonebook
-    Person.find({}).then(result => {
-        result.forEach(person => {
-        console.log(person)
-    })
+  // If name or number is not provided, list all entries in the phonebook
+  Person.find({}).then(result => {
+    result.forEach(person => {console.log(person)})
     mongoose.connection.close()
-    })
+  })
 }
 else {
-    const person = new Person({
+  const person = new Person({
     name: personName,
     number: personNumber,
-    })
+  })
 
-    person.save().then(result => {
+  person.save().then( () => {
     console.log(`added ${personName} number ${personNumber} to phonebook`)
     mongoose.connection.close()
-    })
+  })
 }
