@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 const dummy = (blogs) => {
     return 1
 }
@@ -28,4 +30,20 @@ const favouriteBlog = (blogs) => {
         return fav_blog
     }
 }
-module.exports = { dummy, totalLikes, favouriteBlog }
+
+const mostBlogs = (blogs) => {
+    if (blogs.length === 0 ){
+        return null
+    } else {
+        authors = blogs.map(b => b.author)
+        const frequencies = _.countBy(authors)
+        const most_common = _.maxBy(
+            Object.keys(frequencies),
+            a => frequencies[a]
+        )
+        console.log("most common: ", most_common)
+        return most_common
+    }
+
+}
+module.exports = { dummy, totalLikes, favouriteBlog, mostBlogs }
