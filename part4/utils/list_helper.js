@@ -16,4 +16,16 @@ const totalLikes = (blogs) => {
         return sum
     }
 }
-module.exports = { dummy, totalLikes }
+
+const favouriteBlog = (blogs) => {
+    if (blogs.length === 0 ){
+        return null
+    } else {
+        likes = blogs.map( b => b.likes)
+        max_likes = Math.max(...likes)
+        fav_blog = blogs[likes.indexOf(max_likes)]
+        console.log("Fav blog: ", fav_blog)
+        return fav_blog
+    }
+}
+module.exports = { dummy, totalLikes, favouriteBlog }
