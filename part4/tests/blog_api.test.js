@@ -31,13 +31,19 @@ beforeEach( async () => {
 
 })
 
-test.only('all blogs are returned in JSON format', async () => {
+test('all blogs are returned in JSON format', async () => {
   const response = await api
   .get('/api/blogs')
   .expect(200)
   .expect('Content-Type', /application\/json/)
 
   assert.strictEqual(response.body.length, initialBlog.length)
+})
+
+test.only("unique identifier named ID", async () => {
+    const response = await api.get('/api/blogs')
+    object_keys = Object.keys(response.body[0])
+    assert(object_keys.includes('id'))
 })
 
 after(async () => {
