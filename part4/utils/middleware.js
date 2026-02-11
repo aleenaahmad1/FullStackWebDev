@@ -24,6 +24,14 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
+
+const info = (...params) => {
+
+  if (process.env.NODE_ENV !== 'test') { 
+    console.log(...params)
+  }
+}
+
 module.exports = {
   requestLogger,
   unknownEndpoint,
