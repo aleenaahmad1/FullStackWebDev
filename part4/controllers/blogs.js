@@ -24,7 +24,25 @@ blogsRouter.post('/', async (request, response) => {
   response.status(201).json(savedBlog)
 })
 
-blogsRouter.delete('/:id', async (request, response) => {
+blogsRouter.put('/:id', async (request, response, next) => {
+  const { id, title, likes } = request.body
+  console.log("Inside route: ", title, likes)
+  
+  const blogToUpdate = await Blog.findById(request.params.id)
+  console.log("Blog to update: ", blogToUpdate)
+  if (!blogToUpdate){
+    return response.status(404).end()
+  }
+  blogToUpdate.title = title
+  blogToUpdate.likes = likes
+  const savedBlog = await blogToUpdate.save()
+  console.log("Saved blog: ", savedBlog)
+  response.status(200)
+  response.json(savedBlog)
+})
+
+
+blogsRouter.delete('/:id', async (request, response, next) => {
   try {
     const deletedBlog = await Blog.findByIdAndDelete(request.params.id)
 

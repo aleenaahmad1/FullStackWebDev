@@ -95,21 +95,44 @@ beforeEach( async () => {
 //     .expect(400)
 // })
 
-describe('deletion of a blog', () => {
-    test.only('successfully deletes with status code 204 if id is valid', async () => {
+describe('Updating Likes', () => {
+    test.only('successfully updates likes if id is valid', async () => {
         const blog_response  = await api.get('/api/blogs')
         const currentBlogs = blog_response.body
-        // console.log("Current blog: ", currentBlogs)
-        const blogToDelete = currentBlogs[0]
-        // console.log("Blog to delete: ", blogToDelete.id)
-
-        await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
-
-        const response = await api.get('/api/blogs')
+        console.log("Current blog: ", currentBlogs)
+        const blogToUpdate = currentBlogs[0]
         
-        assert.strictEqual(response.body.length, currentBlogs.length - 1)
+        const updatedObj = {
+            id: blogToUpdate.id,
+            title: blogToUpdate.title,
+            likes: 35
+        }
+        console.log("Updated obj: ", updatedObj)
+        const response = await api
+        .put(`/api/blogs/${updatedObj.id}`)
+        .send(updatedObj)
+        .expect(200)
+
+        console.log("Response: ", response.body)
+        assert.strictEqual(response.body.likes, 35)
     })
 })
+
+// describe('deletion of a blog', () => {
+//     test.only('successfully deletes with status code 204 if id is valid', async () => {
+//         const blog_response  = await api.get('/api/blogs')
+//         const currentBlogs = blog_response.body
+//         // console.log("Current blog: ", currentBlogs)
+//         const blogToDelete = currentBlogs[0]
+//         // console.log("Blog to delete: ", blogToDelete.id)
+
+//         await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+
+//         const response = await api.get('/api/blogs')
+        
+//         assert.strictEqual(response.body.length, currentBlogs.length - 1)
+//     })
+// })
 
 after(async () => {
   await mongoose.connection.close()
