@@ -17,6 +17,8 @@ describe('Addition of users', () => {
     const user = new User({ username: 'root', passwordHash })
 
     await user.save()
+
+    // userToken = jwt.sign({ username: user.username, id: user._id }, process.env.SECRET)
   })
 
   test('creation succeeds with a fresh username', async () => {

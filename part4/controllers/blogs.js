@@ -12,11 +12,13 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', UserExtractor, async (request, response) => {
   const body = request.body
   const user = request.user
+  console.log("Body: ", body)
+  console.log("Token: ", request.token)
   console.log("User: ", user.name)
 
 
   if ((!body.title) || (!body.url)) {
-    response.status(400).end()
+    return response.status(400).end()
   }
   
   if (!user) {
@@ -38,7 +40,7 @@ blogsRouter.post('/', UserExtractor, async (request, response) => {
   user.blogs = user.blogs.concat(blog._id)
   await user.save()
 
-  response.status(201).json(savedBlog)
+  return response.status(201).json(savedBlog)
 })
 
 blogsRouter.put('/:id', async (request, response, next) => {

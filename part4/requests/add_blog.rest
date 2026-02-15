@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBvc2hpaSIsImlkIjoiNjk5MThlMzA0N2JkNGZmNzRlNGMxODY4IiwiaWF0IjoxNzcxMTU0NzMwfQ.R9zTQxt1Pq8CFFfA9OnzHLRBO-b66C-diAcXxqxbTTI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBvc2hpaSIsImlkIjoiNjk5MThlMzA0N2JkNGZmNzRlNGMxODY4IiwiaWF0IjoxNzcxMTU3OTY0fQ.JRdAAUkFHxTOjXuxOCbMD5EIe6yNJwX0Ov4UaS2E250
 
 {
   "title": "doom scrolling",
