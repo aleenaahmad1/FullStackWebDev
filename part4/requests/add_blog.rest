@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "hobby blog",
+  "title": "doodle blog",
   "author": "xyz",
-  "url": "www.hobbyblog.com",
-  "likes": "5"
+  "url": "www.doodleblog.com",
+  "likes": "10"
 }

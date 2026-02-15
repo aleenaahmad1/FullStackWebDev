@@ -1,10 +1,11 @@
-const { test, beforeEach, describe } = require('node:test')
+const { test, beforeEach, describe, after } = require('node:test')
 const supertest = require('supertest')
 const assert = require('assert')
 const bcrypt = require('bcryptjs')
 const User = require('../models/user')
 const helper = require('./test_helper.js')
 const app = require('../app.js')
+const mongoose = require('mongoose')
 
 const api = supertest(app)
 
@@ -39,4 +40,32 @@ describe('when there is initially one user in db', () => {
     const usernames = usersAtEnd.map(u => u.username)
     assert(usernames.includes(newUser.username))
   })
+
+  test('creation fails with the same username', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'root',
+      name: 'hello', 
+      password: 'bye'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect(response => {
+        assert.strictEqual(
+          response.body.error,
+          'password must be atleast 3 characters long'
+        )
+      })
+    
+    const usersAtEnd = await helper.usersInDb
+    assert.strictEqual(usersAtStart, usersAtEnd)
+  })
+})
+
+after(async () => {
+  await mongoose.connection.close()
 })
