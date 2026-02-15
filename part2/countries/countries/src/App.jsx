@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import countryService from './services/countries'
+import weatherService from './services/weather'
 import Notification from './components/Notification'
 import Country from './components/Country'
 import CountryList from './components/CountryList'
@@ -10,6 +11,8 @@ const App = () => {
   const [ displayedCountries, setDisplayedCountries ] = useState([])
   const [ notif, setNotifMsg ] = useState(null)
   const [ singleCountry, setSingleCountry ] = useState(false)
+  const [ weather, setWeather ] = useState(null)
+
 
   const handleSearch = (event) => {
     setSearchedCountry(event.target.value)
@@ -43,10 +46,18 @@ const App = () => {
         return
       }
       else if ( matching.length === 1 ){
-        console.log("one country")
+        // console.log("one country")
         setDisplayedCountries(matching)
         setSingleCountry(true)
-        // setSearchedCountry('')
+        
+        // console.log("capial is ", matching[0].capital[0])
+        weatherService
+        .getWeather(matching[0].capital[0])
+        .then(weather => {
+          // console.log("weather is ", weather)
+          const iconURL = weatherService.getIconURL(weather.weather[0].icon)
+          setWeather({...weather, iconURL: iconURL})
+        })
         return
       }
     }
@@ -63,7 +74,7 @@ const App = () => {
     <>
     Find countries  <input onChange={handleSearch} value={searchedCountry}/>
     <Notification msg={notif} />
-    {singleCountry ? <Country country_data={displayedCountries[0]} /> : <CountryList countries={displayedCountries} showCountry={showCountry} />}
+    {singleCountry && weather ? <Country country_data={displayedCountries[0]} weather={weather} /> : <CountryList countries={displayedCountries} showCountry={showCountry} />}
     </>
   )
 
