@@ -9,7 +9,7 @@ const mongoose = require('mongoose')
 
 const api = supertest(app)
 
-describe('when there is initially one user in db', () => {
+describe('Addition of users', () => {
   beforeEach(async () => {
     await User.deleteMany({})
 
@@ -41,6 +41,27 @@ describe('when there is initially one user in db', () => {
     assert(usernames.includes(newUser.username))
   })
 
+  test('creation fails with the invalid password', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'root',
+      name: 'hello', 
+      password: 'b'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+
+    assert(result.body.error.includes('password must be atleast 3 characters long'))
+    assert.strictEqual(usersAtStart.length, usersAtEnd.length)
+  })
+
   test('creation fails with the same username', async () => {
     const usersAtStart = await helper.usersInDb()
 
@@ -50,19 +71,16 @@ describe('when there is initially one user in db', () => {
       password: 'bye'
     }
 
-    await api
+    const result = await api
       .post('/api/users')
       .send(newUser)
       .expect(400)
-      .expect(response => {
-        assert.strictEqual(
-          response.body.error,
-          'password must be atleast 3 characters long'
-        )
-      })
-    
-    const usersAtEnd = await helper.usersInDb
-    assert.strictEqual(usersAtStart, usersAtEnd)
+      .expect('Content-Type', /application\/json/)
+      
+    const usersAtEnd = await helper.usersInDb()
+
+    assert(result.body.error.includes('expected `username` to be unique'))
+    assert.strictEqual(usersAtStart.length, usersAtEnd.length)
   })
 })
 
