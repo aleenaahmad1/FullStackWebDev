@@ -1,9 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbiOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBvc2hpaSIsImlkIjoiNjk5MThlMzA0N2JkNGZmNzRlNGMxODY4IiwiaWF0IjoxNzcxMTUxODc5fQ.EY8ZVJijSfPrdghnmyo5IDwQS-5e9Fh19cF1vrq79sE
 
 {
-  "title": "doodle blog",
-  "author": "xyz",
-  "url": "www.doodleblog.com",
-  "likes": "10"
+  "title": "dummy",
+  "author": "Poshi",
+  "url": "www.instagram.com",
+  "likes": "100"
 }
