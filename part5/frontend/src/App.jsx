@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
+import Login from './components/Login'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import './index.css'
+import AddBlog from './components/AddBlog'
+
 
 const App = () => {
   const [ blogs, setBlogs ] = useState([])
@@ -13,39 +18,14 @@ const App = () => {
       author: "",
       url: ""
   })
+  const [ notif, setNotif ] = useState(null)
+  const [ msgClass, setMsgClass ] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )  
   }, [user])
-
-  const loginForm = () => (
-      <div>
-      <h2>blogs</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>
-            <input
-              type="text"
-              value={username}
-              onChange={({target}) => {setUsername(target.value)}}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            <input
-              type="password"
-              value={password}
-              onChange={({target}) => {setPassword(target.value)}}
-            />
-          </label>
-        </div>
-        <button type="submit">Login</button>
-      </form>
-      </div>
-  )
   
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -60,10 +40,12 @@ const App = () => {
         setUsername('')
         setPassword('')
       } catch {
-        console.log('wrong credentials') //add error message functionality
+        console.log('wrong credentials') 
+        setNotif("Wrong username or password")
+        setMsgClass("error")
         setTimeout(() => {
           console.log('time')
-          //set error message to null here
+          setNotif(null)
         }, 5000)
       }
       console.log("Logged in with value: ", username, password)
@@ -73,6 +55,7 @@ const App = () => {
     setUser(null)
     window.localStorage.removeItem('loggedUser')
   }
+
   const blogDisplay = () => (
     <div>
     <h2>blogs</h2>
@@ -86,68 +69,26 @@ const App = () => {
   const handleNewBlog = () => {
     console.log("Sending values to blog service: ", newBlog, user)
     blogService.addBlog(newBlog, user)
+    setNotif(`A new blog ${newBlog.title} by ${newBlog.author} added.`)
+    setMsgClass('notif')
     setNewBlog({
       title: "",
       author: "",
       url: ""
     })
+    setTimeout(() => {
+      console.log('time')
+      setNotif(null)
+    }, 5000)
   }
 
-  const blogForm = () => (
-    <div>
-      <div>
-        <label>
-          Title:
-          <input
-            type='text'
-            value={newBlog.title}
-            onChange={(e) => 
-              setNewBlog(prev => ({
-                ...prev,
-                title: e.target.value
-              }))
-            }
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Author:
-          <input
-            type='text'
-            value={newBlog.author}
-            onChange={(e) => 
-              setNewBlog(prev => ({
-                ...prev,
-                author: e.target.value
-              }))
-            }
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          URL:
-          <input
-            type='text'
-            value={newBlog.url}
-            onChange={(e) => 
-              setNewBlog(prev => ({
-                ...prev,
-                url: e.target.value
-              }))
-            }
-          />
-        </label>
-      </div>
-      <button onClick={handleNewBlog}>Create</button>
-    </div>
-  )
+  
   return (
     <div>
-      {!user && loginForm()}
+      {!user && <Login username={username} password={password} setUsername={setUsername} setPassword={setPassword} handleLogin={handleLogin}/>}
+      <Notification message={notif} type={msgClass}/>
       <button onClick={handleLogout}>Log Out</button>
-      {user && blogForm()}
+      {user && AddBlog({newBlog, setNewBlog, handleNewBlog})}
       {user && blogDisplay()}
     </div>
   )
