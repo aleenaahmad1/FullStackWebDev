@@ -8,6 +8,11 @@ const App = () => {
   const [ username, setUsername ] = useState("")
   const [ password, setPassword ] = useState("") 
   const [ user, setUser ] = useState(null)
+  const [ newBlog, setNewBlog ] = useState({
+      title: "",
+      author: "",
+      url: ""
+  })
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -78,10 +83,71 @@ const App = () => {
     </div>
   )
 
+  const handleNewBlog = () => {
+    console.log("Sending values to blog service: ", newBlog, user)
+    blogService.addBlog(newBlog, user)
+    setNewBlog({
+      title: "",
+      author: "",
+      url: ""
+    })
+  }
+
+  const blogForm = () => (
+    <div>
+      <div>
+        <label>
+          Title:
+          <input
+            type='text'
+            value={newBlog.title}
+            onChange={(e) => 
+              setNewBlog(prev => ({
+                ...prev,
+                title: e.target.value
+              }))
+            }
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Author:
+          <input
+            type='text'
+            value={newBlog.author}
+            onChange={(e) => 
+              setNewBlog(prev => ({
+                ...prev,
+                author: e.target.value
+              }))
+            }
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          URL:
+          <input
+            type='text'
+            value={newBlog.url}
+            onChange={(e) => 
+              setNewBlog(prev => ({
+                ...prev,
+                url: e.target.value
+              }))
+            }
+          />
+        </label>
+      </div>
+      <button onClick={handleNewBlog}>Create</button>
+    </div>
+  )
   return (
     <div>
       {!user && loginForm()}
       <button onClick={handleLogout}>Log Out</button>
+      {user && blogForm()}
       {user && blogDisplay()}
     </div>
   )
