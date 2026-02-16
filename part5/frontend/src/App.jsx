@@ -46,7 +46,11 @@ const App = () => {
     event.preventDefault()
     try {
         const user = await loginService.login({ username, password })
-        console.log("user at frontend: ", user)
+
+        window.localStorage.setItem(
+          'loggedUser', JSON.stringify(user)
+        )
+        
         setUser(user)
         setUsername('')
         setPassword('')
@@ -60,6 +64,10 @@ const App = () => {
       console.log("Logged in with value: ", username, password)
   }
 
+  const handleLogout = () => {
+    setUser(null)
+    window.localStorage.removeItem('loggedUser')
+  }
   const blogDisplay = () => (
     <div>
     <h2>blogs</h2>
@@ -73,6 +81,7 @@ const App = () => {
   return (
     <div>
       {!user && loginForm()}
+      <button onClick={handleLogout}>Log Out</button>
       {user && blogDisplay()}
     </div>
   )
