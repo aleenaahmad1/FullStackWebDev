@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Login from './components/Login'
@@ -6,6 +6,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import './index.css'
 import AddBlog from './components/AddBlog'
+import Togglable from './components/Togglable'
 
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
   })
   const [ notif, setNotif ] = useState(null)
   const [ msgClass, setMsgClass ] = useState('')
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -66,8 +68,17 @@ const App = () => {
     </div>
   )
 
+  const blogForm = () => {
+    return (
+    <Togglable buttonLabel='Add Blog' ref={blogFormRef}>
+        <AddBlog newBlog={newBlog} setNewBlog={setNewBlog} handleNewBlog={handleNewBlog}/>
+    </Togglable>
+    )
+  }
+
   const handleNewBlog = () => {
     console.log("Sending values to blog service: ", newBlog, user)
+    blogFormRef.current.toggleVisibility()
     blogService.addBlog(newBlog, user)
     setNotif(`A new blog ${newBlog.title} by ${newBlog.author} added.`)
     setMsgClass('notif')
@@ -85,10 +96,20 @@ const App = () => {
   
   return (
     <div>
-      {!user && <Login username={username} password={password} setUsername={setUsername} setPassword={setPassword} handleLogin={handleLogin}/>}
+      {!user && 
+      <Togglable buttonLabel='Login'>
+        <Login 
+          username={username}
+          password={password}
+          setUsername={setUsername}
+          setPassword={setPassword}
+          handleLogin={handleLogin}
+        />
+      </Togglable>
+      }
       <Notification message={notif} type={msgClass}/>
-      <button onClick={handleLogout}>Log Out</button>
-      {user && AddBlog({newBlog, setNewBlog, handleNewBlog})}
+      {user && <button onClick={handleLogout}>Log Out</button>}
+      {user && blogForm()}
       {user && blogDisplay()}
     </div>
   )
