@@ -14,11 +14,6 @@ const App = () => {
   const [ username, setUsername ] = useState("")
   const [ password, setPassword ] = useState("") 
   const [ user, setUser ] = useState(null)
-  const [ newBlog, setNewBlog ] = useState({
-      title: "",
-      author: "",
-      url: ""
-  })
   const [ notif, setNotif ] = useState(null)
   const [ msgClass, setMsgClass ] = useState('')
   const blogFormRef = useRef()
@@ -71,22 +66,16 @@ const App = () => {
   const blogForm = () => {
     return (
     <Togglable buttonLabel='Add Blog' ref={blogFormRef}>
-        <AddBlog newBlog={newBlog} setNewBlog={setNewBlog} handleNewBlog={handleNewBlog}/>
+        <AddBlog handleNewBlog={handleNewBlog}/>
     </Togglable>
     )
   }
 
-  const handleNewBlog = () => {
-    console.log("Sending values to blog service: ", newBlog, user)
+  const handleNewBlog = (newBlog) => {
     blogFormRef.current.toggleVisibility()
     blogService.addBlog(newBlog, user)
     setNotif(`A new blog ${newBlog.title} by ${newBlog.author} added.`)
     setMsgClass('notif')
-    setNewBlog({
-      title: "",
-      author: "",
-      url: ""
-    })
     setTimeout(() => {
       console.log('time')
       setNotif(null)

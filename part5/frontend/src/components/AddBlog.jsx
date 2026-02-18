@@ -1,4 +1,22 @@
-const AddBlog = ({ newBlog, setNewBlog, handleNewBlog }) => {
+import { useState } from 'react'
+
+const AddBlog = ({ handleNewBlog }) => {
+  const [ newBlog, setNewBlog ] = useState({
+        title: "",
+        author: "",
+        url: ""
+    })
+
+  const addNewBlog = () => {
+    console.log("Sending values to blog service: ", newBlog)
+    handleNewBlog(newBlog)
+     setNewBlog({
+      title: "",
+      author: "",
+      url: ""
+    })
+  }
+
   return (
     <div>
       <div>
@@ -46,7 +64,7 @@ const AddBlog = ({ newBlog, setNewBlog, handleNewBlog }) => {
           />
         </label>
       </div>
-      <button onClick={handleNewBlog}>Create</button>
+      <button onClick={addNewBlog}>Create</button>
     </div>
   )
 }
