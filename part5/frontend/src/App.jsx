@@ -18,10 +18,13 @@ const App = () => {
   const [ msgClass, setMsgClass ] = useState('')
   const blogFormRef = useRef()
 
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+  useEffect( () => {
+    async function fetchBlogs() {
+      const returnedBlogs = await blogService.getAll()
+      const sortedBlogs = returnedBlogs.sort((a, b) => b.likes - a.likes)
+      setBlogs(sortedBlogs)
+    }
+    fetchBlogs()
   }, [user])
   
   const handleLogin = async (event) => {
@@ -72,9 +75,10 @@ const App = () => {
     )
   }
 
-  const handleNewBlog = (newBlog) => {
+  const handleNewBlog = async (newBlog) => {
     blogFormRef.current.toggleVisibility()
-    blogService.addBlog(newBlog, user)
+    const returnedBlog = await blogService.addBlog(newBlog, user)
+    setBlogs(blogs.concat(returnedBlog))
     setNotif(`A new blog ${newBlog.title} by ${newBlog.author} added.`)
     setMsgClass('notif')
     setTimeout(() => {
