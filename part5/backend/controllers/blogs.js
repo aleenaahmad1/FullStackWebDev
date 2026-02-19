@@ -44,16 +44,16 @@ blogsRouter.post('/', UserExtractor, async (request, response) => {
 })
 
 blogsRouter.put('/:id', async (request, response, next) => {
-  const { id, title, likes } = request.body
-  console.log("Inside route: ", title, likes)
+  const blog = request.body
+  console.log("Inside route: ", blog.title, blog.likes)
   
   const blogToUpdate = await Blog.findById(request.params.id)
   console.log("Blog to update: ", blogToUpdate)
   if (!blogToUpdate){
     return response.status(404).end()
   }
-  blogToUpdate.title = title
-  blogToUpdate.likes = likes
+  // blogToUpdate.title = blog.title
+  blogToUpdate.likes = blog.likes
   const savedBlog = await blogToUpdate.save()
   console.log("Saved blog: ", savedBlog)
   response.status(200)

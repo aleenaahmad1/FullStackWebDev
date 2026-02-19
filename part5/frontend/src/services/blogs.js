@@ -12,4 +12,11 @@ const addBlog = async (blog, user) => {
   return response.data
 }
 
-export default { getAll, addBlog }
+const likeBlog = async (blog, id) => {
+  console.log("Inside like blog", blog)
+  const likeURL = `${baseUrl}/${id}`
+  const response = await axios.put(likeURL, blog)
+  return response.data
+}
+
+export default { getAll, addBlog, likeBlog }

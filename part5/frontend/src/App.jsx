@@ -58,7 +58,7 @@ const App = () => {
     <h2>blogs</h2>
     <div>
     {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />)
+        <Blog key={blog.id} blog={blog} updateLikes={updateLikes}/>)
     }
     </div>
     </div>
@@ -83,6 +83,16 @@ const App = () => {
     }, 5000)
   }
 
+  const updateLikes = async (updatedBlog, id) => {
+    const returnedBlog = await blogService.likeBlog(updatedBlog, id)
+    setBlogs(blogs.map(blog => blog.id === id ? returnedBlog : blog))
+    setNotif(`Blog ${updatedBlog.title} liked!`)
+    setMsgClass('notif')
+    setTimeout(() => {
+      console.log('time')
+      setNotif(null)
+    }, 2000)
+  }
   
   return (
     <div>
