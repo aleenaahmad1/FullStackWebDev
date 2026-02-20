@@ -1,11 +1,14 @@
 import { useState } from "react"
 
 
-const Blog = ({ blog, updateLikes }) => {
+const Blog = ({ blog, updateLikes, deleteBlog, user }) => {
 
   const [ showDetails, setShowDetails ] = useState(false)
   const [ buttonLabel, setButtonLabel ] = useState('view')
-  // const [ likes, setLikes ] = useState(0)
+
+  const showRemove = user.id === blog.user.id
+  console.log("User id: ", user.id)
+  // console.log("Blog user id: ", blog.user.toString())
   
   const blogStyle = {
     paddingTop: 10,
@@ -30,6 +33,12 @@ const Blog = ({ blog, updateLikes }) => {
     updateLikes(newBlog, blog.id)
   }
 
+  const handleDelete = () => {
+    if(window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      deleteBlog(blog.id)
+    }
+  }
+
   return (
     <div style={blogStyle}>
       <div>
@@ -44,6 +53,7 @@ const Blog = ({ blog, updateLikes }) => {
               <button onClick={handleLike}>Like</button>
             </p>
             <p>{blog.author}</p>
+            {showRemove && <button onClick={handleDelete}>Remove</button>}
           </div>
         )
       }

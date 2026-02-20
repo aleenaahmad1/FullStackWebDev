@@ -19,4 +19,10 @@ const likeBlog = async (blog, id) => {
   return response.data
 }
 
-export default { getAll, addBlog, likeBlog }
+const deleteBlog = async (id, user) => {
+  console.log("Inside delete blog", user)
+  const deleteURL = `${baseUrl}/${id}`
+  const response = await axios.delete(deleteURL, { headers: {'Authorization': `Bearer ${user.token}`}})
+  return response.data
+}
+export default { getAll, addBlog, likeBlog, deleteBlog }
