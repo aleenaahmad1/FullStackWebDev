@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 
 const Blog = ({ blog, updateLikes, deleteBlog, user }) => {
@@ -7,9 +7,9 @@ const Blog = ({ blog, updateLikes, deleteBlog, user }) => {
   const [ buttonLabel, setButtonLabel ] = useState('view')
 
   const showRemove = user.id === blog.user.id
-  console.log("User id: ", user.id)
+  console.log('User id: ', user.id)
   // console.log("Blog user id: ", blog.user.toString())
-  
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -45,7 +45,7 @@ const Blog = ({ blog, updateLikes, deleteBlog, user }) => {
         {blog.title}  <button onClick={handleClick}>{buttonLabel}</button>
       </div>
       {
-        showDetails && 
+        showDetails &&
         (
           <div>
             <p>{blog.url}</p>
@@ -57,7 +57,7 @@ const Blog = ({ blog, updateLikes, deleteBlog, user }) => {
           </div>
         )
       }
-    </div>  
+    </div>
   )
 
 }
