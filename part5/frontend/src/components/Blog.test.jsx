@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { vi } from 'vitest'
 import Blog from './Blog'
 
@@ -32,4 +33,39 @@ test('renders title and author by default', () => {
   expect(author).toBeDefined()
   expect(likes).toBeNull()
   expect(url).toBeNull()
+})
+
+test('renders url and likes when view button is clicked', async () => {
+    const blog = {
+    title: 'how to cook',
+    author: 'MM',
+    likes: 10,
+    url: 'https://www.cooking.com',
+    user: {
+      username: 'aleena',
+      id: 1
+    }
+  }
+
+  const blogUser = {
+    username: 'aleena',
+    id: 1
+  }
+
+  const mockUpdateLikes = vi.fn()
+  const mockDeleteBlogs = vi.fn()
+  const mockHandler = vi.fn()
+
+  render(<Blog blog={blog} updateLikes={mockUpdateLikes} deleteBlog={mockDeleteBlogs} user={blogUser} />)
+
+  const user = userEvent.setup()
+  const button = screen.getByText('view')
+  await user.click(button)
+  
+  const likes = screen.getByText('Likes 10')
+  const url = screen.getByText('https://www.cooking.com')
+
+  expect(likes).toBeDefined()
+  expect(url).toBeDefined()
+  
 })
