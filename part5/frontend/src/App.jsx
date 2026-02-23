@@ -11,8 +11,8 @@ import Togglable from './components/Togglable'
 
 const App = () => {
   const [ blogs, setBlogs ] = useState([])
-  const [ username, setUsername ] = useState("")
-  const [ password, setPassword ] = useState("") 
+  const [ username, setUsername ] = useState('')
+  const [ password, setPassword ] = useState('')
   const [ user, setUser ] = useState(null)
   const [ notif, setNotif ] = useState(null)
   const [ msgClass, setMsgClass ] = useState('')
@@ -26,29 +26,28 @@ const App = () => {
     }
     fetchBlogs()
   }, [])
-  
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-        const user = await loginService.login({ username, password })
+      const user = await loginService.login({ username, password })
 
-        window.localStorage.setItem(
-          'loggedUser', JSON.stringify(user)
-        )
-        
-        setUser(user)
-        setUsername('')
-        setPassword('')
-      } catch {
-        console.log('wrong credentials') 
-        setNotif("Wrong username or password")
-        setMsgClass("error")
-        setTimeout(() => {
-          console.log('time')
-          setNotif(null)
-        }, 5000)
-      }
-      console.log("Logged in with value: ", username, password)
+      window.localStorage.setItem(
+        'loggedUser', JSON.stringify(user)
+      )
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    } catch {
+      console.log('wrong credentials')
+      setNotif('Wrong username or password')
+      setMsgClass('error')
+      setTimeout(() => {
+        console.log('time')
+        setNotif(null)
+      }, 5000)
+    }
+    console.log('Logged in with value: ', username, password)
   }
 
   const handleLogout = () => {
@@ -57,25 +56,24 @@ const App = () => {
   }
 
   const blogDisplay = () => {
-    console.log("in blog display, user: ", user)
+    console.log('in blog display, user: ', user)
     return (
-
-    <div>
-    <h2>blogs</h2>
-    <div>
-    {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateLikes={updateLikes} deleteBlog={deleteBlog} user={user}/>)
-    }
-    </div>
-    </div>
-  )
-}
+      <div>
+        <h2>blogs</h2>
+        <div>
+          {blogs.map(blog =>
+            <Blog key={blog.id} blog={blog} updateLikes={updateLikes} deleteBlog={deleteBlog} user={user}/>)
+          }
+        </div>
+      </div>
+    )
+  }
 
   const blogForm = () => {
     return (
-    <Togglable buttonLabel='Add Blog' ref={blogFormRef}>
+      <Togglable buttonLabel='Add Blog' ref={blogFormRef}>
         <AddBlog handleNewBlog={handleNewBlog}/>
-    </Togglable>
+      </Togglable>
     )
   }
 
@@ -106,12 +104,12 @@ const App = () => {
     blogService.deleteBlog(id, user)
     setBlogs(blogs.filter(blog => blog.id !== id))
   }
-  
+
   return (
     <div>
-      {!user && 
+      {!user &&
       <Togglable buttonLabel='Login'>
-        <Login 
+        <Login
           username={username}
           password={password}
           setUsername={setUsername}
@@ -127,5 +125,4 @@ const App = () => {
     </div>
   )
 }
-      
 export default App

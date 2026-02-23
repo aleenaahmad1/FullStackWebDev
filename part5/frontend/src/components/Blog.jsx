@@ -42,7 +42,9 @@ const Blog = ({ blog, updateLikes, deleteBlog, user }) => {
   return (
     <div style={blogStyle}>
       <div>
-        {blog.title}  <button onClick={handleClick}>{buttonLabel}</button>
+        <p>{blog.title}</p>
+        <p>{blog.author}</p>
+        <button onClick={handleClick}>{buttonLabel}</button>
       </div>
       {
         showDetails &&
@@ -52,7 +54,6 @@ const Blog = ({ blog, updateLikes, deleteBlog, user }) => {
             <p>Likes {blog.likes}
               <button onClick={handleLike}>Like</button>
             </p>
-            <p>{blog.author}</p>
             {showRemove && <button onClick={handleDelete}>Remove</button>}
           </div>
         )
