@@ -2,18 +2,18 @@ import { useState } from 'react'
 
 const AddBlog = ({ handleNewBlog }) => {
   const [ newBlog, setNewBlog ] = useState({
-        title: "",
-        author: "",
-        url: ""
-    })
+    title: '',
+    author: '',
+    url: ''
+  })
 
   const addNewBlog = () => {
-    console.log("Sending values to blog service: ", newBlog)
+    // console.log('Sending values to blog service: ', newBlog)
     handleNewBlog(newBlog)
-     setNewBlog({
-      title: "",
-      author: "",
-      url: ""
+    setNewBlog({
+      title: '',
+      author: '',
+      url: ''
     })
   }
 
@@ -25,7 +25,7 @@ const AddBlog = ({ handleNewBlog }) => {
           <input
             type='text'
             value={newBlog.title}
-            onChange={(e) => 
+            onChange={(e) =>
               setNewBlog(prev => ({
                 ...prev,
                 title: e.target.value
@@ -40,7 +40,7 @@ const AddBlog = ({ handleNewBlog }) => {
           <input
             type='text'
             value={newBlog.author}
-            onChange={(e) => 
+            onChange={(e) =>
               setNewBlog(prev => ({
                 ...prev,
                 author: e.target.value
@@ -55,7 +55,7 @@ const AddBlog = ({ handleNewBlog }) => {
           <input
             type='text'
             value={newBlog.url}
-            onChange={(e) => 
+            onChange={(e) =>
               setNewBlog(prev => ({
                 ...prev,
                 url: e.target.value
