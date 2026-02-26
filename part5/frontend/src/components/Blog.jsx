@@ -6,9 +6,9 @@ const Blog = ({ blog, updateLikes, deleteBlog, user }) => {
   const [ showDetails, setShowDetails ] = useState(false)
   const [ buttonLabel, setButtonLabel ] = useState('view')
 
+  console.log('Blog: ', blog)
+  console.log('User: ', user.id)
   const showRemove = user.id === blog.user.id
-  console.log('User id: ', user.id)
-  // console.log("Blog user id: ", blog.user.toString())
 
   const blogStyle = {
     paddingTop: 10,

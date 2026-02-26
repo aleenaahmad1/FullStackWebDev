@@ -38,6 +38,13 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      console.log('user: ', user)
+      setNotif(`Logged in as ${user.username}`)
+      setMsgClass('notif')
+      setTimeout(() => {
+        console.log('time')
+        setNotif(null)
+      }, 3000)
     } catch {
       console.log('wrong credentials')
       setNotif('Wrong username or password')
