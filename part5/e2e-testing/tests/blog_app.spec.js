@@ -18,7 +18,7 @@ describe('Blog App', () => {
     })
 
     test('Login Form is shown', async ({ page }) => {
-        const loginButton = await page.getByRole('button', {name: 'login'})
+        const loginButton = page.getByRole('button', {name: 'login'})
         await expect(loginButton).toBeVisible()
         await loginButton.click()
         await expect(page.getByLabel('username')).toBeVisible()
@@ -52,11 +52,11 @@ describe('Blog App', () => {
         describe('and a blog exists', () => {
             beforeEach(async ({ page }) => {
                 await addBlog(page, 'test blog by playwright', 'Poshmal', 'test.com')
-                await addBlog(page, 'another test blog by playwright', 'Poshmal', 'test2.com')
-                await addBlog(page, 'a third test blog by playwright', 'Poshmal', 'test2.com')
+                await addBlog(page, 'another blog by playwright', 'Poshmal', 'test2.com')
+                await addBlog(page, 'a third blog by playwright', 'Poshmal', 'test2.com')
             })
         
-        test.only('a blog can be liked', async ({ page }) => {
+        test('a blog can be liked', async ({ page }) => {
             const blog = page.locator('.blog', { hasText: 'another test blog by playwright' })
             
             await blog.getByRole('button', { name: 'view'}).click()
@@ -64,6 +64,31 @@ describe('Blog App', () => {
             await expect(page.getByText('Likes 1')).toBeVisible()
         })  
 
+        test('a blog can be deleted by the user who created it', async ({ page }) => {
+            const blog = page.locator('.blog', { hasText: 'test blog by playwright' })
+            
+            await blog.getByRole('button', { name: 'view'}).click()
+            page.on('dialog', dialog => dialog.accept())
+            await blog.getByRole('button', { name: 'Remove'}).click()
+            await expect(page.getByText('test blog by playwright')).not.toBeVisible()
+        })
+
+        test.only('remove button not visible to a different user', async ({ page, request }) => {
+            await request.post('http://localhost:3003/api/users', {
+                data: {
+                    name: 'Another User',
+                    username: 'anotheruser',
+                    password: 'password'
+                }
+            })
+            await page.getByRole('button', { name: 'Log Out' }).click()
+            await loginWith(page, 'anotheruser', 'password')
+
+            const blog = page.locator('.blog', { hasText: 'test blog by playwright' })
+            
+            await blog.getByRole('button', { name: 'view'}).click()
+            await expect(blog.getByRole('button', { name: 'Remove'})).not.toBeVisible()
         })
     })
+  })
 })
