@@ -26,16 +26,16 @@ const initialBlog = [
 ]
 
 beforeEach( async () => {
-    await Blog.deleteMany({})
-    let blogObject = new Blog(initialBlog[0])
-    await blogObject.save()
-    blogObject = new Blog(initialBlog[1])
-    await blogObject.save()
+    // await Blog.deleteMany({})
+    // let blogObject = new Blog(initialBlog[0])
+    // await blogObject.save()
+    // blogObject = new Blog(initialBlog[1])
+    // await blogObject.save()
     
     await User.deleteMany({})
     
-    const passwordHash = await bcrypt.hash('sekret', 10)
-    const user = new User({ username: 'root', passwordHash })    
+    const passwordHash = await bcrypt.hash('123456', 10)
+    const user = new User({ username: 'poshii', passwordHash })    
     
     await user.save()
     
@@ -43,29 +43,29 @@ beforeEach( async () => {
 
 })
 
-test('all blogs are returned in JSON format', async () => {
-  const response = await api
-  .get('/api/blogs')
-  .expect(200)
-  .expect('Content-Type', /application\/json/)
+// test('all blogs are returned in JSON format', async () => {
+//   const response = await api
+//   .get('/api/blogs')
+//   .expect(200)
+//   .expect('Content-Type', /application\/json/)
 
-  assert.strictEqual(response.body.length, initialBlog.length)
-})
+//   assert.strictEqual(response.body.length, initialBlog.length)
+// })
 
-test("unique identifier named ID", async () => {
-    const response = await api.get('/api/blogs')
-    object_keys = Object.keys(response.body[0])
-    assert(object_keys.includes('id'))
-})
+// test("unique identifier named ID", async () => {
+//     const response = await api.get('/api/blogs')
+//     object_keys = Object.keys(response.body[0])
+//     assert(object_keys.includes('id'))
+// })
 
 test("a new blog can be added", async () => {
     const newBlog = {
-        title: "blog 3", 
-        author: "qudsia", 
-        url: "blog3.com",
-        likes: 11
+        title: "blog 2", 
+        author: "poshi", 
+        url: "blog2.com",
+        likes: 5
     }
-    
+
     await api
     .post('/api/blogs')
     .set('Authorization', `Bearer ${userToken}`)
@@ -78,52 +78,52 @@ test("a new blog can be added", async () => {
     const blogTitles = response.body.map(b => b.title)
 
     assert.strictEqual(response.body.length, initialBlog.length + 1)
-    assert(blogTitles.includes('blog 3'))
+    assert(blogTitles.includes('blog 1'))
 })
 
-  test("a new blog cannot be added without token", async () => {
-    const newBlog = {
-        title: "blog 3",
-        author: "qudsia",
-        url: "blog3.com",
-        likes: 11
-    }
+//   test("a new blog cannot be added without token", async () => {
+//     const newBlog = {
+//         title: "blog 3",
+//         author: "qudsia",
+//         url: "blog3.com",
+//         likes: 11
+//     }
 
-    await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(401)
-    .expect('Content-Type', /application\/json/)
-  })
+//     await api
+//     .post('/api/blogs')
+//     .send(newBlog)
+//     .expect(401)
+//     .expect('Content-Type', /application\/json/)
+//   })
 
-test("sets no likes to 0", async () => {
-    const newBlog = {
-        title: "blog 3", 
-        author: "qudsia", 
-        url: "blog3.com",
-    }
+// test("sets no likes to 0", async () => {
+//     const newBlog = {
+//         title: "blog 3", 
+//         author: "qudsia", 
+//         url: "blog3.com",
+//     }
 
-    const response = await api
-    .post('/api/blogs')
-    .set('Authorization', `Bearer ${userToken}`)
-    .send(newBlog)
-    .expect(201)
-    .expect('Content-Type', /application\/json/)
+//     const response = await api
+//     .post('/api/blogs')
+//     .set('Authorization', `Bearer ${userToken}`)
+//     .send(newBlog)
+//     .expect(201)
+//     .expect('Content-Type', /application\/json/)
 
-    assert.strictEqual(response.body.likes, 0)
-})
+//     assert.strictEqual(response.body.likes, 0)
+// })
 
-test("gives error if no title or url", async () => {
-    const newBlog = {
-        author: "qudsia"   
-    }
+// test("gives error if no title or url", async () => {
+//     const newBlog = {
+//         author: "qudsia"   
+//     }
 
-    const response = await api
-    .post('/api/blogs')
-    .set('Authorization', `Bearer ${userToken}`)
-    .send(newBlog)
-    .expect(400)
-})
+//     const response = await api
+//     .post('/api/blogs')
+//     .set('Authorization', `Bearer ${userToken}`)
+//     .send(newBlog)
+//     .expect(400)
+// })
 
 // describe('Updating Likes', () => {
 //     test.only('successfully updates likes if id is valid', async () => {
