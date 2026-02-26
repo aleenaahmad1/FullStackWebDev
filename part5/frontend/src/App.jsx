@@ -88,12 +88,12 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
     const returnedBlog = await blogService.addBlog(newBlog, user)
     setBlogs(blogs.concat(returnedBlog))
-    setNotif(`A new blog ${newBlog.title} by ${newBlog.author} added.`)
-    setMsgClass('notif')
-    setTimeout(() => {
-      console.log('time')
-      setNotif(null)
-    }, 5000)
+    // setNotif(`A new blog ${newBlog.title} by ${newBlog.author} added.`)
+    // setMsgClass('notif')
+    // setTimeout(() => {
+    //   console.log('time')
+    //   setNotif(null)
+    // }, 5000)
   }
 
   const updateLikes = async (updatedBlog, id) => {

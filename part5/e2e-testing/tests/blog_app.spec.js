@@ -36,4 +36,22 @@ describe('Blog App', () => {
 
         })
     })
+
+    describe('When logged in', () => {
+        beforeEach(async ({ page }) => {
+            await loginWith(page, 'poshii', '123456')
+        })
+
+        test.only('a new blog can be created', async ({ page }) => {
+            const addBlog = page.getByRole('button', { name: 'Add Blog' })
+            await addBlog.click()
+            
+            await page.getByLabel('Title').fill('test blog by playwright')
+            await page.getByLabel('Author').fill('Poshmal')
+            await page.getByLabel('URL').fill('test.com')
+            await page.getByRole('button', { name: 'Create' }).click()
+
+            await expect(page.getByText('test blog by playwright')).toBeVisible()
+        })
+    })
 })
