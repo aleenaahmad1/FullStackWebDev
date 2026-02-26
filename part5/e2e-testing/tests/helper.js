@@ -14,4 +14,15 @@ const addBlog = async ( page, title, author, url ) => {
     await page.getByRole('button', { name: 'Create' }).click()
 }
 
-export { loginWith, addBlog }
+const likeBlog = async ( page, title ) => {
+    const blog = page.locator('.blog', { hasText: title })
+    await blog.getByRole('button', { name: 'view'}).click()
+    await blog.getByRole('button', { name: 'Like'}).click()
+    await blog.getByRole('button', { name: 'hide'}).click()    
+}
+
+const viewDetails = async ( page, title ) => {
+    const blog = page.locator('.blog', { hasText: title })
+    await blog.getByRole('button', { name: 'view'}).click()
+}
+export { loginWith, addBlog, likeBlog, viewDetails }
