@@ -1,9 +1,10 @@
 const { test, describe, expect, beforeEach } = require('@playwright/test')
-const { loginWith } = require('./helper')
+const { loginWith, addBlog } = require('./helper')
 
 describe('Blog App', () => {
     beforeEach( async ({ page, request }) => {
-        await request.post('http://localhost:3003/api/users/testing/reset')
+        const res = await request.post('http://localhost:3003/api/testing/reset')
+        console.log('RESET STATUS:', res.status())
         await request.post('http://localhost:3003/api/users', {
             data: {
                 name: 'Poshi',
@@ -35,23 +36,34 @@ describe('Blog App', () => {
             await expect(page.getByText('Wrong username or password')).toBeVisible()
 
         })
-    })
+    })  
 
     describe('When logged in', () => {
         beforeEach(async ({ page }) => {
             await loginWith(page, 'poshii', '123456')
         })
 
-        test.only('a new blog can be created', async ({ page }) => {
-            const addBlog = page.getByRole('button', { name: 'Add Blog' })
-            await addBlog.click()
+        test('a new blog can be created', async ({ page }) => {
+            await addBlog(page, 'test blog by playwright', 'Poshmal', 'test.com')
             
-            await page.getByLabel('Title').fill('test blog by playwright')
-            await page.getByLabel('Author').fill('Poshmal')
-            await page.getByLabel('URL').fill('test.com')
-            await page.getByRole('button', { name: 'Create' }).click()
-
             await expect(page.getByText('test blog by playwright')).toBeVisible()
+        })
+
+        describe('and a blog exists', () => {
+            beforeEach(async ({ page }) => {
+                await addBlog(page, 'test blog by playwright', 'Poshmal', 'test.com')
+                await addBlog(page, 'another test blog by playwright', 'Poshmal', 'test2.com')
+                await addBlog(page, 'a third test blog by playwright', 'Poshmal', 'test2.com')
+            })
+        
+        test.only('a blog can be liked', async ({ page }) => {
+            const blog = page.locator('.blog', { hasText: 'another test blog by playwright' })
+            
+            await blog.getByRole('button', { name: 'view'}).click()
+            await blog.getByRole('button', { name: 'Like'}).click()
+            await expect(page.getByText('Likes 1')).toBeVisible()
+        })  
+
         })
     })
 })
